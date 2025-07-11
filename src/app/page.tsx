@@ -1,9 +1,9 @@
-import AppHeader from "../../components/AppHeader";
+import Searchbar from "../../components/Searchbar";
 
 export default async function Home() {
   return (
     <div>
-      <AppHeader />
+      <Searchbar />
     </div>
   );
 }

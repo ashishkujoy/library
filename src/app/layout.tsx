@@ -7,6 +7,7 @@ const roboto = Roboto({
 
 import type { Metadata } from "next";
 import "./globals.css";
+import AppHeader from '../../components/AppHeader';
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +22,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className}`}>
-        {children}
+        <div className='app-container'>
+          <AppHeader />
+          <div className='app-child'>{children}</div>
+          
+        </div>
       </body>
     </html>
   );
