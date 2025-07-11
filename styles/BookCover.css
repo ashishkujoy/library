@@ -1,0 +1,134 @@
+.book-cover {
+    width: 100px;
+    height: 160px;
+    background: linear-gradient(145deg, #2c3e50, #34495e);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #34495e;
+}
+
+.book-cover:hover {
+    transform: translateY(-10px) rotateX(5deg);
+    box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.book-cover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.05) 100%);
+    pointer-events: none;
+}
+
+.book-spine {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 8px;
+    height: 100%;
+    background: linear-gradient(180deg, #1a252f, #2c3e50);
+    border-radius: 12px 0 0 12px;
+}
+
+.book-content {
+    height: 100%;
+    display: flex;
+    padding-bottom: 8px;
+    justify-content: space-between;
+    flex-direction: column;
+    position: relative;
+    z-index: 2;
+}
+
+.book-title {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    align-content: center;
+    font-size: 12px;
+    font-weight: 400;
+    color: #ecf0f1;
+    line-height: 1.3;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.book-author {
+    font-size: 10px;
+    margin: 0;
+    padding: 2px 0;
+    background-color: #000;
+    color: #bdc3c7;
+    text-align: center;
+    font-style: italic;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.book-decoration {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    border: 3px solid rgba(236, 240, 241, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(236, 240, 241, 0.15);
+    z-index: 1;
+}
+
+.book-cover.color1 {
+    background: linear-gradient(145deg, #2c3e50, #8e44ad);
+}
+
+.book-cover.color2 {
+    background: linear-gradient(145deg, #ad1457, #e91e63);
+}
+
+.book-cover.color3 {
+    background: linear-gradient(145deg, #1565c0, #42a5f5);
+}
+
+.book-cover.color4 {
+    background: linear-gradient(145deg, #2e7d32, #66bb6a);
+}
+
+.book-cover.color5 {
+    background: linear-gradient(145deg, #f57c00, #ff9800);
+}
+
+.book-cover.color6 {
+    background: linear-gradient(145deg, #6d4c41, #8d6e63);
+}
+
+.book-cover.color7 {
+    background: linear-gradient(145deg, #37474f, #546e7a);
+}
+
+.book-cover.color8 {
+    background: linear-gradient(145deg, #4a148c, #7b1fa2);
+}
+
+.book-cover.color9 {
+    background: linear-gradient(145deg, #c2185b, #d81b60);
+}
+
+.book-cover.color0 {
+    background: linear-gradient(145deg, #0d47a1, #1976d2);
+}
