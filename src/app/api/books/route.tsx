@@ -1,7 +1,7 @@
 import { getBooks } from "../../../../db/books";
 
 const extractQueries = (url: string) => {
-    const searchParams = new URLSearchParams(url);
+    const searchParams = new URLSearchParams(url.split('?')[1] || '');
     const lastSeenId = searchParams.get("lastSeenId");
 
     return {

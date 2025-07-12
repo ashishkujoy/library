@@ -1,0 +1,236 @@
+.reading-book-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin: 8px 0;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    min-height: 180px;
+    border-left: 4px solid #4a90e2;
+}
+
+.reading-book-row:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.reading-book-cover {
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+.reading-book-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.reading-book-title {
+    margin: 0 0 8px 0;
+    font-size: clamp(16px, 4vw, 20px);
+    font-weight: 600;
+    color: #2c3e50;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.reading-book-author {
+    margin: 0 0 12px 0;
+    font-size: clamp(12px, 3vw, 16px);
+    color: #6c757d;
+    font-style: italic;
+    line-height: 1.3;
+}
+
+.reading-book-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reading-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.reading-info-item.overdue {
+    color: #dc3545;
+}
+
+.reading-info-label {
+    font-size: clamp(11px, 2.5vw, 13px);
+    font-weight: 500;
+    color: #495057;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.reading-info-value {
+    font-size: clamp(12px, 3vw, 14px);
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.overdue-badge {
+    background-color: #dc3545;
+    color: white;
+    font-size: clamp(9px, 2vw, 11px);
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.reading-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    gap: 16px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4a90e2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.reading-loading p {
+    color: #6c757d;
+    font-size: 16px;
+    margin: 0;
+}
+
+.reading-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+}
+
+.empty-state {
+    text-align: center;
+    max-width: 300px;
+}
+
+.empty-state h3 {
+    color: #2c3e50;
+    margin: 0 0 12px 0;
+    font-size: clamp(18px, 4vw, 22px);
+}
+
+.empty-state p {
+    color: #6c757d;
+    margin: 0;
+    font-size: clamp(14px, 3vw, 16px);
+    line-height: 1.5;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .reading-book-row {
+        padding: 8px 12px;
+        margin: 6px 0;
+        min-height: 140px;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .reading-book-cover {
+        margin-right: 12px;
+        transform: scale(0.8);
+        transform-origin: top left;
+    }
+    
+    .reading-book-details {
+        padding-top: 4px;
+    }
+    
+    .reading-book-title {
+        font-size: clamp(14px, 4.5vw, 18px);
+        margin-bottom: 6px;
+        line-height: 1.1;
+    }
+    
+    .reading-book-author {
+        font-size: clamp(11px, 3.5vw, 14px);
+        margin-bottom: 8px;
+    }
+    
+    .reading-book-info {
+        gap: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .reading-book-row {
+        padding: 6px 8px;
+        margin: 4px 0;
+        min-height: 120px;
+    }
+    
+    .reading-book-cover {
+        margin-right: 8px;
+        transform: scale(0.7);
+    }
+    
+    .reading-book-title {
+        font-size: clamp(13px, 5vw, 16px);
+        margin-bottom: 4px;
+    }
+    
+    .reading-book-author {
+        font-size: clamp(10px, 4vw, 13px);
+        margin-bottom: 6px;
+    }
+    
+    .reading-book-info {
+        gap: 4px;
+    }
+}
+
+/* Large desktop screens */
+@media (min-width: 1200px) {
+    .reading-book-row {
+        padding: 16px 20px;
+        min-height: 200px;
+    }
+    
+    .reading-book-cover {
+        margin-right: 20px;
+        transform: scale(1.1);
+        transform-origin: center;
+    }
+    
+    .reading-book-title {
+        font-size: clamp(18px, 2vw, 24px);
+        margin-bottom: 10px;
+    }
+    
+    .reading-book-author {
+        font-size: clamp(14px, 1.5vw, 18px);
+        margin-bottom: 14px;
+    }
+    
+    .reading-book-info {
+        gap: 10px;
+    }
+}

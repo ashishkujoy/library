@@ -120,7 +120,6 @@ const Books = () => {
                 context={{ loadingMore }}
                 components={{ Footer: LoadingFooter }}
                 itemContent={(index, book) => {
-                    console.log("Rendering book:", book);
                     return <BookRow key={book.id} book={book} index={index} />;
                 }}
             />
