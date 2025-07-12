@@ -1,0 +1,54 @@
+"use client";
+import { BookOpenCheckIcon, CopyPlusIcon } from "lucide-react";
+import StickyFooter from "../../../components/StickyFooter";
+import "./page.css";
+
+type ListProps = {
+    label: string;
+    description: string;
+    icon: React.ReactNode;
+    href: string;
+}
+
+const ListItem = (props: ListProps) => {
+    return (
+        <div
+            className="list-item"
+            onClick={() => window.location.assign(props.href)}
+        >
+            <div className="item-icon">
+                {props.icon}
+            </div>
+            <div>
+                <span className="list-label">{props.label}</span>
+                <p className="list-description">{props.description}</p>
+            </div>
+        </div>
+    )
+}
+
+export default function ManagePage() {
+    return (
+        <div style={{ paddingBottom: '80px', margin: '16px 0px 0px 16px', }}>
+            <div>
+                <h6 className="page-title">Manage Your Library</h6>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+                <ListItem
+                    label="Add New Book"
+                    description="Add a new book to your library"
+                    icon={<CopyPlusIcon size={20} color="var(--main-color)" />}
+                    href="/manage/add-book"
+                />
+                <ListItem
+                    label="View All Borrowed Books"
+                    description="See all books currently borrowed by users"
+                    icon={<BookOpenCheckIcon size={20} color="var(--main-color)" />}
+                    href="/manage/borrowed-books"
+                />
+            </div>
+
+            <StickyFooter activeTab="books" />
+        </div>
+    );
+}

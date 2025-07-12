@@ -3,6 +3,7 @@ import { QrCodeIcon, Settings2Icon } from "lucide-react";
 import "../styles/FloatingActionButtons.css";
 import BarcodeScanner from "./BarcodeScanner";
 import { useState } from "react";
+import Link from "next/link";
 
 const FloatingActionButtons = () => {
     const [showScanner, setShowScanner] = useState(false);
@@ -23,7 +24,7 @@ const FloatingActionButtons = () => {
     return (
         <div>
             <div className="floating-actions">
-                <button 
+                <button
                     className="floating-btn floating-btn-scan"
                     onClick={handleScanClick}
                     aria-label="Scan book"
@@ -31,17 +32,19 @@ const FloatingActionButtons = () => {
                 >
                     <QrCodeIcon size={22} />
                 </button>
-                
-                <button 
-                    className="floating-btn floating-btn-manage"
-                    onClick={handleManageClick}
-                    aria-label="Manage books"
-                    title="Manage books"
-                >
-                    <Settings2Icon size={22} />
-                </button>
+
+                <Link href="/manage" style={{ textDecoration: 'none' }}>
+                    <button
+                        className="floating-btn floating-btn-manage"
+                        onClick={handleManageClick}
+                        aria-label="Manage books"
+                        title="Manage books"
+                    >
+                        <Settings2Icon size={22} />
+                    </button>
+                </Link>
             </div>
-            <BarcodeScanner 
+            <BarcodeScanner
                 onResult={handleScanResult}
                 onError={(error) => console.error("Scan error:", error)}
                 opened={showScanner} // This should be controlled by state in a real app
