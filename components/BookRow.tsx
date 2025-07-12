@@ -99,11 +99,12 @@ const Books = () => {
 
     return (
         <div style={{ 
-            height: 'calc(100vh - 120px)', 
+            height: 'calc(100vh - 200px)', 
             overflow: 'hidden', 
             boxSizing: 'border-box', 
             padding: 'clamp(8px, 2vw, 16px)',
-            maxWidth: '100%'
+            maxWidth: '100%',
+            marginBottom: 'clamp(60px, 15vw, 80px)'
         }}>
             <Virtuoso
                 style={{ height: "100%" }}
