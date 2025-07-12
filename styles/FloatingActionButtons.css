@@ -1,0 +1,137 @@
+.floating-actions {
+    position: fixed;
+    bottom: 100px; /* Above the sticky footer */
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10000;
+}
+
+.floating-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.floating-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.floating-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.floating-btn-scan {
+    background: #4a5568;
+    color: white;
+}
+
+.floating-btn-scan:hover {
+    background: #2d3748;
+}
+
+.floating-btn-manage {
+    background: #4a5568;
+    color: white;
+}
+
+.floating-btn-manage:hover {
+    background: #2d3748;
+}
+
+/* Ripple effect */
+.floating-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.floating-btn:active::before {
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .floating-actions {
+        bottom: 90px;
+        right: 16px;
+        gap: 10px;
+    }
+    
+    .floating-btn {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .floating-actions {
+        bottom: 80px;
+        right: 12px;
+        gap: 8px;
+    }
+    
+    .floating-btn {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+/* Large desktop screens */
+@media (min-width: 1200px) {
+    .floating-actions {
+        bottom: 120px;
+        right: 24px;
+        gap: 16px;
+    }
+    
+    .floating-btn {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Animation for entrance */
+.floating-btn {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.floating-btn:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.floating-btn:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
