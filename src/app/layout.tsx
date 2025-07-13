@@ -2,6 +2,9 @@ import { Roboto } from 'next/font/google'
 import type { Metadata } from "next";
 import "./globals.css";
 import AppHeader from '../../components/AppHeader';
+import { getServerSession } from "next-auth";
+import { authOptions } from './lib/auth';
+import Login from '../../components/Login';
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -18,19 +21,21 @@ export const viewport = {
   themeColor: "#fff",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body className={`${roboto.className}`}>
-        <div className='app-container'>
-          <AppHeader />
-          <div className='app-child'>{children}</div>
-
-        </div>
+        {
+          !session ? <Login /> : <div className='app-container'>
+            <AppHeader />
+            <div className='app-child'>{children}</div>
+          </div>
+        }
       </body>
     </html>
   );
