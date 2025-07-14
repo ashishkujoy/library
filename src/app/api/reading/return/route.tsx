@@ -17,6 +17,7 @@ export const POST = async (req: Request) => {
         }
         return new Response(JSON.stringify({ message: "Book returned successfully" }), { status: 200 });
     } catch (error) {
+        console.error("Error returning book:", error);
         return new Response(JSON.stringify({ message: "Internal server error" }), { status: 500 });
     }
 }
