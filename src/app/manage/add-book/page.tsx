@@ -2,7 +2,6 @@
 import { QrCodeIcon } from "lucide-react";
 import { FormEvent, useState } from "react";
 import BarcodeScanner from "../../../../components/BarcodeScanner";
-import FloatingActionButtons from "../../../../components/FloatingActionButtons";
 import LabelStack from "../../../../components/LabelStack";
 import LoaderOverlay from "../../../../components/LoaderOverlay";
 import Note from "../../../../components/Note";
@@ -19,6 +18,7 @@ type BookDetails = {
 
 const NewBookForm = () => {
     const [showCopyQRReader, setShowCopyQRReader] = useState(false);
+    const [showBookQRReader, setShowBookQRReader] = useState(false);
     const [copies, setCopies] = useState<string[]>([]);
     const [validationError, setValidationError] = useState<string>("");
     const [showSuccess, setShowSuccess] = useState(false);
@@ -32,6 +32,7 @@ const NewBookForm = () => {
     });
 
     const toggleCopyQRReader = () => setShowCopyQRReader(!showCopyQRReader);
+    const toggleBookQRReader = () => setShowBookQRReader(!showBookQRReader);
     const handleCopyQRCode = (result: string) => {
         if (!copies.includes(result)) {
             setCopies([...copies, result]);
@@ -92,46 +93,48 @@ const NewBookForm = () => {
     return (
         <form onSubmit={handleSubmit}>
             {loading && <LoaderOverlay title="Loading" message="Please wait while we process your request..." />}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 
-            <TextInput
-                minLength={2}
-                name="title"
-                id="title"
-                required={true}
-                label={"Title"}
-                value={bookDetails.title}
-                onChange={(e) => setBookDetails({ ...bookDetails, title: e.target.value })}
-            />
-            <TextInput
-                minLength={2}
-                maxLength={1000}
-                name="authors"
-                id="authors"
-                required={true}
-                label={"Authors(comma separated)"}
-                value={bookDetails.authors}
-                onChange={(e) => setBookDetails({ ...bookDetails, authors: e.target.value })}
-            />
-            <TextInput
-                minLength={10}
-                maxLength={10}
-                name="isbn10"
-                id="isbn10"
-                required={false}
-                label={"ISBN 10"}
-                value={bookDetails.isbn10}
-                onChange={(e) => setBookDetails({ ...bookDetails, isbn10: e.target.value })}
-            />
-            <TextInput
-                minLength={13}
-                maxLength={13}
-                name="isbn13"
-                id="isbn13"
-                required={false}
-                label={"ISBN 13"}
-                value={bookDetails.isbn13}
-                onChange={(e) => setBookDetails({ ...bookDetails, isbn13: e.target.value })}
-            />
+                <TextInput
+                    minLength={2}
+                    name="title"
+                    id="title"
+                    required={true}
+                    label={"Title"}
+                    value={bookDetails.title}
+                    onChange={(e) => setBookDetails({ ...bookDetails, title: e.target.value })}
+                />
+                <TextInput
+                    minLength={2}
+                    maxLength={1000}
+                    name="authors"
+                    id="authors"
+                    required={true}
+                    label={"Authors(comma separated)"}
+                    value={bookDetails.authors}
+                    onChange={(e) => setBookDetails({ ...bookDetails, authors: e.target.value })}
+                />
+                <TextInput
+                    minLength={10}
+                    maxLength={10}
+                    name="isbn10"
+                    id="isbn10"
+                    required={false}
+                    label={"ISBN 10"}
+                    value={bookDetails.isbn10}
+                    onChange={(e) => setBookDetails({ ...bookDetails, isbn10: e.target.value })}
+                />
+                <TextInput
+                    minLength={13}
+                    maxLength={13}
+                    name="isbn13"
+                    id="isbn13"
+                    required={false}
+                    label={"ISBN 13"}
+                    value={bookDetails.isbn13}
+                    onChange={(e) => setBookDetails({ ...bookDetails, isbn13: e.target.value })}
+                />
+            </div>
             {
                 copies.length === 0 && <Note message="You can add copies later or scan QR code to add copies now." />
             }
@@ -139,22 +142,46 @@ const NewBookForm = () => {
                 labels={copies.map((copy, index) => ({ id: index, title: copy }))}
                 onRemoveLabel={(id) => setCopies(copies.filter((_, index) => index !== id))}
             />
-            <button
-                type="button"
-                title="Scan book barcode"
-                className="scan-copy-qr-button"
-                onClick={toggleCopyQRReader}
-                aria-label="Scan book"
-                style={{ marginTop: "10px", marginBlock: "10px" }}
-            >
-                <QrCodeIcon size={22} />
-                <span>Scan Copy QR</span>
-            </button>
+            <div style={{ display: "flex", gap: "10px" }}>
+                <button
+                    type="button"
+                    title="Scan book copy qrcode"
+                    className="scan-copy-qr-button"
+                    onClick={toggleCopyQRReader}
+                    aria-label="Scan book"
+                    style={{ marginTop: "10px", marginBlock: "10px" }}
+                >
+                    <QrCodeIcon size={22} />
+                    <span>Scan Copy QR</span>
+                </button>
+                <button
+                    type="button"
+                    title="Scan book barcode"
+                    className="scan-copy-qr-button"
+                    onClick={toggleCopyQRReader}
+                    aria-label="Scan book"
+                    style={{ marginTop: "10px", marginBlock: "10px" }}
+                >
+                    <QrCodeIcon size={22} />
+                    <span>Scan Book Barcode</span>
+                </button>
+                <button type="button"
+                    title="Scan book barcode"
+                    className="scan-copy-qr-button"
+                    aria-label="Scan book"
+                    style={{ marginTop: "10px", marginBlock: "10px" }}
+                >Add Book</button>
+            </div>
             <BarcodeScanner
                 onResult={handleCopyQRCode}
                 onError={toggleCopyQRReader}
                 opened={showCopyQRReader}
                 onCancel={toggleCopyQRReader} />
+            <BarcodeScanner
+                onResult={prefillBookDetails}
+                onError={toggleBookQRReader}
+                opened={showBookQRReader}
+                onCancel={toggleBookQRReader} />
             {validationError && (
                 <div style={{
                     color: "#d32f2f",
@@ -168,21 +195,6 @@ const NewBookForm = () => {
                     {validationError}
                 </div>
             )}
-            <FloatingActionButtons onScanResult={prefillBookDetails} onScanError={() => { }} />
-            <button type="submit"
-                style={{
-                    position: "fixed",
-                    bottom: "100px",
-                    width: "100%",
-                    fontSize: "0.875rem",
-                    fontWeight: "500",
-                    lineHeight: "1.75rem",
-                    textTransform: "uppercase",
-                    borderRadius: "4px",
-                    padding: "5px 15px",
-                    cursor: "pointer",
-                    backgroundColor: "#fff"
-                }}>Add Book</button>
             <Snackbar
                 message={"Successfully added book!"}
                 type={"success"}
@@ -195,7 +207,6 @@ const NewBookForm = () => {
                 isOpen={showError}
                 onClose={() => setShowError(false)}
             />
-
         </form>
     );
 }
