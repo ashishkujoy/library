@@ -8,6 +8,7 @@ import BarcodeScanner from "./BarcodeScanner";
 type Props = {
     onScanResult: (result: string) => void;
     onScanError: (error: string) => void;
+    showManage?: boolean;
 }
 
 const FloatingActionButtons = (props: Props) => {
@@ -36,16 +37,18 @@ const FloatingActionButtons = (props: Props) => {
                     <QrCodeIcon size={22} />
                 </button>
 
-                <Link href="/manage" style={{ textDecoration: 'none' }}>
-                    <button
-                        className="floating-btn floating-btn-manage"
-                        onClick={handleManageClick}
-                        aria-label="Manage books"
-                        title="Manage books"
-                    >
-                        <Settings2Icon size={22} />
-                    </button>
-                </Link>
+                {props.showManage && (
+                    <Link href="/manage" style={{ textDecoration: 'none' }}>
+                        <button
+                            className="floating-btn floating-btn-manage"
+                            onClick={handleManageClick}
+                            aria-label="Manage books"
+                            title="Manage books"
+                        >
+                            <Settings2Icon size={22} />
+                        </button>
+                    </Link>
+                )}
             </div>
             <BarcodeScanner
                 onResult={handleScanResult}

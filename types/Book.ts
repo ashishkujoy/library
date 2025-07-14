@@ -7,3 +7,10 @@ export type Book = {
     count: number;
     borrowedCount: number;
 };
+
+export type BookCopy = {
+    id: number;
+    bookId: number;
+    qrCode: string;
+    borrowed: boolean;
+};

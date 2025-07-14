@@ -1,6 +1,9 @@
-import { neon } from '@neondatabase/serverless';
+import { neon, NeonQueryFunction } from '@neondatabase/serverless';
 import { pool } from '../src/app/lib/db';
 import { BorrowedBook } from '../types/BorrowedBook';
+import { BookCopy } from '../types/Book';
+
+type SQL = NeonQueryFunction<false, false>;
 
 export const getBorrowedBooks = async (userId: number): Promise<BorrowedBook[]> => {
     const sql = neon(`${process.env.DATABASE_URL}`);
@@ -9,10 +12,10 @@ export const getBorrowedBooks = async (userId: number): Promise<BorrowedBook[]> 
         FROM borrowed_books bb
         JOIN book_copies bc ON bb.book_copy_id = bc.id
         JOIN books b ON bc.book_id = b.id
-        WHERE bb.user_id = ${userId}
+        WHERE bb.user_id = ${userId} AND bb.returned_at IS NULL
         ORDER BY bb.borrowed_at DESC;
     `;
-    
+
     return rows.map(row => ({
         id: row.id,
         title: row.title,
@@ -122,3 +125,42 @@ export const borrowBook = async (userId: number, qrCode: string): Promise<Borrow
         client.release();
     }
 };
+
+const getBookCopyByQRCode = async (sql: SQL, qrCode: string): Promise<BookCopy | null> => {
+    const result = await sql`
+        SELECT id, book_id, borrowed FROM book_copies WHERE qr_code = ${qrCode} LIMIT 1;
+    `;
+    if (result.length === 0) {
+        return null;
+    }
+    const row = result[0];
+    return {
+        id: row.id,
+        bookId: row.book_id,
+        qrCode: qrCode,
+        borrowed: row.borrowed
+    }
+}
+
+export const returnBook = async (userId: number, barcode: string): Promise<{ success: boolean; message: string }> => {
+    const sql = neon(`${process.env.DATABASE_URL}`);
+    const bookCopy = await getBookCopyByQRCode(sql, barcode);
+    if (!bookCopy) {
+        return { success: false, message: 'Book copy not found' };
+    }
+    if (!bookCopy.borrowed) {
+        return { success: false, message: 'Book copy is not borrowed' };
+    }
+    const id = await sql`UPDATE borrowed_books
+        SET returned_at = CURRENT_TIMESTAMP
+        WHERE book_copy_id = ${bookCopy.id} AND user_id = ${userId} AND returned_at IS NULL RETURNING id;`
+
+    if (id.length === 0) {
+        return { success: false, message: 'You have not borrowed this book' };
+    }
+
+    await sql`UPDATE book_copies SET borrowed = FALSE WHERE id = ${bookCopy.id};`;
+    await sql`UPDATE books SET borrowed_count = borrowed_count - 1 WHERE id = ${bookCopy.bookId};`;
+
+    return { success: true, message: 'Book returned successfully' };
+}
