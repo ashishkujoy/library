@@ -23,6 +23,15 @@ CREATE TABLE IF NOT EXISTS borrowed_books (
     returned_at TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS library_users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    is_admin BOOLEAN DEFAULT FALSE,
+    batch_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS verification_token
 (
   identifier TEXT NOT NULL,
@@ -72,6 +81,9 @@ CREATE TABLE IF NOT EXISTS users
 );
 
 -- Performance Indexes
+
+-- Library Users table indexes
+CREATE INDEX IF NOT EXISTS idx_library_users_email ON library_users(email);
 
 -- Books table indexes
 CREATE INDEX IF NOT EXISTS idx_books_title ON books(title);

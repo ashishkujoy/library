@@ -93,7 +93,13 @@ export const checkBookCopyAvailability = async (qrCode: string): Promise<{ avail
     }
 };
 
-export const borrowBook = async (userId: number, qrCode: string): Promise<{ success: boolean; message: string; borrowedBookId?: number }> => {
+type BorrowBookResponse = {
+    success: boolean;
+    message: string;
+    borrowedBookId?: number;
+}
+
+export const borrowBook = async (userId: number, qrCode: string): Promise<BorrowBookResponse> => {
     const client = await pool.connect();
 
     try {
