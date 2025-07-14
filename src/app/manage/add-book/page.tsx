@@ -5,7 +5,8 @@ import BarcodeScanner from "../../../../components/BarcodeScanner";
 import Note from "../../../../components/Note";
 import StickyFooter from "../../../../components/StickyFooter";
 import TextInput from "../../../../components/TextInput";
-import "../../../../styles/FloatingActionButtons.css";
+import LabelStack from "../../../../components/LabelStack";
+import './page.css';
 
 const NewBookForm = () => {
     const [showCopyQRReader, setShowCopyQRReader] = useState(false);
@@ -25,21 +26,29 @@ const NewBookForm = () => {
             <TextInput minLength={10} maxLength={10} name="isbn10" id="isbn10" required={false} label={"ISBN 10"} />
             <TextInput minLength={13} maxLength={13} name="isbn13" id="isbn13" required={false} label={"ISBN 13"} />
             <TextInput minLength={2} maxLength={1000} name="author" id="author" required={true} label={"Authors(comma separated)"} />
-
+            {
+                copies.length === 0 && <Note message="You can add copies later or scan QR code to add copies now." />
+            }
+            <LabelStack
+                labels={copies.map((copy, index) => ({ id: index, title: copy }))}
+                onRemoveLabel={(id) => setCopies(copies.filter((_, index) => index !== id))}
+            />
             <button
-                className="floating-btn floating-btn-scan"
+                type="button"
+                title="Scan book barcode"
+                className="scan-copy-qr-button"
                 onClick={toggleCopyQRReader}
                 aria-label="Scan book"
-                title="Scan book barcode"
+                style={{marginTop: "10px", marginBlock: "10px"}}
             >
                 <QrCodeIcon size={22} />
+                <span>Scan Copy QR</span>
             </button>
             <BarcodeScanner
                 onResult={handleCopyQRCode}
                 onError={toggleCopyQRReader}
                 opened={showCopyQRReader}
                 onCancel={toggleCopyQRReader} />
-
             <button type="submit"
                 style={{
                     position: "fixed",
