@@ -72,6 +72,7 @@ const NewBookForm = () => {
     }
 
     const prefillBookDetails = (barcode: string) => {
+        toggleBookQRReader();
         setLoading(true);
         fetch(`/api/book?barcode=${barcode}`)
             .then(res => res.json().then(data => ({ status: res.status, data })))
@@ -158,7 +159,7 @@ const NewBookForm = () => {
                     type="button"
                     title="Scan book barcode"
                     className="scan-copy-qr-button"
-                    onClick={toggleCopyQRReader}
+                    onClick={toggleBookQRReader}
                     aria-label="Scan book"
                     style={{ marginTop: "10px", marginBlock: "10px" }}
                 >
