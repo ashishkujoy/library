@@ -1,9 +1,24 @@
 "use client";
+import { QrCodeIcon } from "lucide-react";
+import { useState } from "react";
+import BarcodeScanner from "../../../../components/BarcodeScanner";
 import Note from "../../../../components/Note";
 import StickyFooter from "../../../../components/StickyFooter";
 import TextInput from "../../../../components/TextInput";
+import "../../../../styles/FloatingActionButtons.css";
 
 const NewBookForm = () => {
+    const [showCopyQRReader, setShowCopyQRReader] = useState(false);
+    const [copies, setCopies] = useState<string[]>([]);
+
+    const toggleCopyQRReader = () => setShowCopyQRReader(!showCopyQRReader);
+    const handleCopyQRCode = (result: string) => {
+        if (!copies.includes(result)) {
+            setCopies([...copies, result]);
+        }
+        toggleCopyQRReader();
+    }
+
     return (
         <form>
             <TextInput minLength={2} name="title" id="title" required={true} label={"Title"} />
@@ -11,20 +26,34 @@ const NewBookForm = () => {
             <TextInput minLength={13} maxLength={13} name="isbn13" id="isbn13" required={false} label={"ISBN 13"} />
             <TextInput minLength={2} maxLength={1000} name="author" id="author" required={true} label={"Authors(comma separated)"} />
 
-                <button type="submit"
-                    style={{
-                        position: "fixed",
-                        bottom: "100px",
-                        width: "100%",
-                        fontSize: "0.875rem",
-                        fontWeight: "500",
-                        lineHeight: "1.75rem",
-                        textTransform: "uppercase",
-                        borderRadius: "4px",
-                        padding: "5px 15px",
-                        cursor: "pointer",
-                        backgroundColor: "#fff"
-                    }}>Add Book</button>
+            <button
+                className="floating-btn floating-btn-scan"
+                onClick={toggleCopyQRReader}
+                aria-label="Scan book"
+                title="Scan book barcode"
+            >
+                <QrCodeIcon size={22} />
+            </button>
+            <BarcodeScanner
+                onResult={handleCopyQRCode}
+                onError={toggleCopyQRReader}
+                opened={showCopyQRReader}
+                onCancel={toggleCopyQRReader} />
+
+            <button type="submit"
+                style={{
+                    position: "fixed",
+                    bottom: "100px",
+                    width: "100%",
+                    fontSize: "0.875rem",
+                    fontWeight: "500",
+                    lineHeight: "1.75rem",
+                    textTransform: "uppercase",
+                    borderRadius: "4px",
+                    padding: "5px 15px",
+                    cursor: "pointer",
+                    backgroundColor: "#fff"
+                }}>Add Book</button>
 
         </form>
     );
