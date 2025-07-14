@@ -7,7 +7,6 @@ import LabelStack from "../../../../components/LabelStack";
 import LoaderOverlay from "../../../../components/LoaderOverlay";
 import Note from "../../../../components/Note";
 import Snackbar from "../../../../components/Snackbar";
-import StickyFooter from "../../../../components/StickyFooter";
 import TextInput from "../../../../components/TextInput";
 import './page.css';
 
