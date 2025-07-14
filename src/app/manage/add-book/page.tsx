@@ -92,6 +92,8 @@ const NewBookForm = () => {
 
     return (
         <form onSubmit={handleSubmit}>
+            {loading && <LoadingView />}
+
             <TextInput
                 minLength={2}
                 name="title"
@@ -194,7 +196,6 @@ const NewBookForm = () => {
                 isOpen={showError}
                 onClose={() => setShowError(false)}
             />
-            {loading && <LoadingView />}
 
         </form>
     );

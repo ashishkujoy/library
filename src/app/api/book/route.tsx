@@ -4,8 +4,10 @@ import { Book } from "../../../../types/Book";
 type SQL = NeonQueryFunction<false, false>;
 
 const findBookByIsbn = async (sql: SQL, isbn: string): Promise<Book> => {
+    console.log("Searching for book with ISBN:", isbn);
     const rows = await sql`SELECT * FROM books WHERE isbn10 = ${isbn} OR isbn13 = ${isbn} LIMIT 1`;
     if (rows.length === 0) {
+        console.log("No book found with the provided ISBN.", isbn);
         throw new Error("Book not found");
     }
     console.log("Book found:", rows[0]);
