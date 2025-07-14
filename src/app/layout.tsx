@@ -5,6 +5,8 @@ import AppHeader from '../../components/AppHeader';
 import { getServerSession } from "next-auth";
 import { authOptions } from './lib/auth';
 import Login from '../../components/Login';
+import SessionProviderWrapper from "./SessionProviderWrapper";
+
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -33,7 +35,9 @@ export default async function RootLayout({
         {
           !session ? <Login /> : <div className='app-container'>
             <AppHeader />
-            <div className='app-child'>{children}</div>
+            <SessionProviderWrapper>
+              <div className='app-child'>{children}</div>
+            </SessionProviderWrapper>
           </div>
         }
       </body>

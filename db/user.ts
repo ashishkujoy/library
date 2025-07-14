@@ -32,3 +32,11 @@ export const checkUserExists = async (email: string): Promise<boolean> => {
     `;
     return user.length > 0;
 }
+
+export const checkIsUserAdmin = async (email: string): Promise<boolean> => {
+    const sql = neon(`${process.env.DATABASE_URL}`);
+    const user = await sql`
+        SELECT is_admin FROM library_users WHERE email = ${email} AND is_admin = true LIMIT 1;
+    `;
+    return user.length > 0;
+}

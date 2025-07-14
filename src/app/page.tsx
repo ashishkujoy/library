@@ -7,10 +7,15 @@ import StickyFooter from "../../components/StickyFooter";
 import { useSnackbar } from "../../utils/useSnackbar";
 import Snackbar from "../../components/Snackbar";
 import LoadingView from "./loading";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const { snackbar, showSuccess, showError, close } = useSnackbar();
+  const { data } = useSession();
+
+  const isAdmin = data?.user?.isAdmin || false;
+
 
   const borrowBook = (result: string) => {
     setLoading(true);
@@ -39,7 +44,7 @@ export default function Home() {
     <div style={{ paddingBottom: '80px' }}>
       <Searchbar />
       <Books />
-      <FloatingActionButtons onScanResult={borrowBook} onScanError={showError} />
+      <FloatingActionButtons onScanResult={borrowBook} onScanError={showError} showManage={isAdmin} />
       <StickyFooter activeTab="books" />
       <Snackbar
         message={snackbar.message}
