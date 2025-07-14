@@ -9,6 +9,14 @@ import LabelStack from "../../../../components/LabelStack";
 import './page.css';
 import Snackbar from "../../../../components/Snackbar";
 import LoadingView from "@/app/loading";
+import FloatingActionButtons from "../../../../components/FloatingActionButtons";
+
+type BookDetails = {
+    title: string;
+    isbn10: string;
+    isbn13: string;
+    authors: string;
+}
 
 const NewBookForm = () => {
     const [showCopyQRReader, setShowCopyQRReader] = useState(false);
@@ -17,6 +25,12 @@ const NewBookForm = () => {
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [bookDetails, setBookDetails] = useState<BookDetails>({
+        title: "",
+        authors: "",
+        isbn10: "",
+        isbn13: "",
+    });
 
     const toggleCopyQRReader = () => setShowCopyQRReader(!showCopyQRReader);
     const handleCopyQRCode = (result: string) => {
@@ -57,12 +71,66 @@ const NewBookForm = () => {
             .finally(() => setLoading(false));
     }
 
+    const prefillBookDetails = (barcode: string) => {
+        setLoading(true);
+        fetch(`/api/book?barcode=${barcode}`)
+            .then(res => res.json().then(data => ({ status: res.status, data })))
+            .then(({ status, data }) => {
+                if (status === 200) {
+                    setBookDetails({
+                        title: data.title,
+                        authors: data.authors,
+                        isbn10: data.isbn10 || "",
+                        isbn13: data.isbn13 || "",
+                    });
+                } else {
+                    setValidationError("Book not found. Please check the ISBN or add it manually.");
+                }
+            })
+            .finally(() => setLoading(false));
+    }
+
     return (
         <form onSubmit={handleSubmit}>
-            <TextInput minLength={2} name="title" id="title" required={true} label={"Title"} />
-            <TextInput minLength={10} maxLength={10} name="isbn10" id="isbn10" required={false} label={"ISBN 10"} />
-            <TextInput minLength={13} maxLength={13} name="isbn13" id="isbn13" required={false} label={"ISBN 13"} />
-            <TextInput minLength={2} maxLength={1000} name="authors" id="authors" required={true} label={"Authors(comma separated)"} />
+            <TextInput
+                minLength={2}
+                name="title"
+                id="title"
+                required={true}
+                label={"Title"}
+                value={bookDetails.title}
+                onChange={(e) => setBookDetails({ ...bookDetails, title: e.target.value })}
+            />
+            <TextInput
+                minLength={2}
+                maxLength={1000}
+                name="authors"
+                id="authors"
+                required={true}
+                label={"Authors(comma separated)"}
+                value={bookDetails.authors}
+                onChange={(e) => setBookDetails({ ...bookDetails, authors: e.target.value })}
+            />
+            <TextInput
+                minLength={10}
+                maxLength={10}
+                name="isbn10"
+                id="isbn10"
+                required={false}
+                label={"ISBN 10"}
+                value={bookDetails.isbn10}
+                onChange={(e) => setBookDetails({ ...bookDetails, isbn10: e.target.value })}
+            />
+            <TextInput
+                minLength={13}
+                maxLength={13}
+                name="isbn13"
+                id="isbn13"
+                required={false}
+                label={"ISBN 13"}
+                value={bookDetails.isbn13}
+                onChange={(e) => setBookDetails({ ...bookDetails, isbn13: e.target.value })}
+            />
             {
                 copies.length === 0 && <Note message="You can add copies later or scan QR code to add copies now." />
             }
@@ -99,6 +167,7 @@ const NewBookForm = () => {
                     {validationError}
                 </div>
             )}
+            <FloatingActionButtons onScanResult={prefillBookDetails} onScanError={() => { }} />
             <button type="submit"
                 style={{
                     position: "fixed",

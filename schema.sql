@@ -32,6 +32,14 @@ CREATE TABLE IF NOT EXISTS library_users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS books_db (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  authors TEXT,
+  isbn10 VARCHAR(10) UNIQUE,
+  isbn13 VARCHAR(13) UNIQUE
+);
+
 CREATE TABLE IF NOT EXISTS verification_token
 (
   identifier TEXT NOT NULL,
@@ -89,6 +97,9 @@ CREATE INDEX IF NOT EXISTS idx_library_users_email ON library_users(email);
 CREATE INDEX IF NOT EXISTS idx_books_title ON books(title);
 CREATE INDEX IF NOT EXISTS idx_books_isbn10 ON books(isbn10);
 CREATE INDEX IF NOT EXISTS idx_books_isbn13 ON books(isbn13);
+
+CREATE INDEX IF NOT EXISTS idx_books_db_isbn10 ON books_db(isbn10);
+CREATE INDEX IF NOT EXISTS idx_books_db_isbn13 ON books_db(isbn13);
 
 -- Book copies table indexes
 CREATE INDEX IF NOT EXISTS idx_book_copies_book_id ON book_copies(book_id);
