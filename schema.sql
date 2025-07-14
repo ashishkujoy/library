@@ -70,3 +70,33 @@ CREATE TABLE IF NOT EXISTS users
  
   PRIMARY KEY (id)
 );
+
+-- Performance Indexes
+
+-- Books table indexes
+CREATE INDEX IF NOT EXISTS idx_books_title ON books(title);
+CREATE INDEX IF NOT EXISTS idx_books_isbn10 ON books(isbn10);
+CREATE INDEX IF NOT EXISTS idx_books_isbn13 ON books(isbn13);
+
+-- Book copies table indexes
+CREATE INDEX IF NOT EXISTS idx_book_copies_book_id ON book_copies(book_id);
+CREATE INDEX IF NOT EXISTS idx_book_copies_borrowed ON book_copies(borrowed);
+CREATE INDEX IF NOT EXISTS idx_book_copies_qr_code ON book_copies(qr_code);
+
+-- Borrowed books table indexes
+CREATE INDEX IF NOT EXISTS idx_borrowed_books_book_copy_id ON borrowed_books(book_copy_id);
+CREATE INDEX IF NOT EXISTS idx_borrowed_books_user_id ON borrowed_books(user_id);
+CREATE INDEX IF NOT EXISTS idx_borrowed_books_user_borrowed ON borrowed_books(user_id, borrowed_at) WHERE returned_at IS NULL;
+
+-- Authentication table indexes
+CREATE INDEX IF NOT EXISTS idx_accounts_user_id ON accounts("userId");
+CREATE INDEX IF NOT EXISTS idx_accounts_provider ON accounts(provider, "providerAccountId");
+
+CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions("userId");
+CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions("sessionToken");
+CREATE INDEX IF NOT EXISTS idx_sessions_expires ON sessions(expires);
+
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+
+CREATE INDEX IF NOT EXISTS idx_verification_token_identifier ON verification_token(identifier);
+CREATE INDEX IF NOT EXISTS idx_verification_token_expires ON verification_token(expires);

@@ -1,16 +1,22 @@
 "use client";
 import { QrCodeIcon } from "lucide-react";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import BarcodeScanner from "../../../../components/BarcodeScanner";
 import Note from "../../../../components/Note";
 import StickyFooter from "../../../../components/StickyFooter";
 import TextInput from "../../../../components/TextInput";
 import LabelStack from "../../../../components/LabelStack";
 import './page.css';
+import Snackbar from "../../../../components/Snackbar";
+import LoadingView from "@/app/loading";
 
 const NewBookForm = () => {
     const [showCopyQRReader, setShowCopyQRReader] = useState(false);
     const [copies, setCopies] = useState<string[]>([]);
+    const [validationError, setValidationError] = useState<string>("");
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const toggleCopyQRReader = () => setShowCopyQRReader(!showCopyQRReader);
     const handleCopyQRCode = (result: string) => {
@@ -20,12 +26,43 @@ const NewBookForm = () => {
         toggleCopyQRReader();
     }
 
+    function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+        event.preventDefault();
+        const data = Object.fromEntries(new FormData(event.currentTarget).entries());
+
+        // Clear any previous validation errors
+        setValidationError("");
+
+        // Validate that at least one ISBN is provided
+        const isbn10 = data.isbn10 as string;
+        const isbn13 = data.isbn13 as string;
+
+        if (!isbn10?.trim() && !isbn13?.trim()) {
+            setValidationError("Please provide at least one ISBN (ISBN 10 or ISBN 13)");
+            return;
+        }
+        setLoading(true);
+        fetch('/api/books/on-board', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...data, copies }),
+        })
+            .then(res => {
+                const fn = res.ok ? setShowSuccess : setShowError;
+                fn(true);
+            })
+            .catch(() => setShowError(true))
+            .finally(() => setLoading(false));
+    }
+
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <TextInput minLength={2} name="title" id="title" required={true} label={"Title"} />
             <TextInput minLength={10} maxLength={10} name="isbn10" id="isbn10" required={false} label={"ISBN 10"} />
             <TextInput minLength={13} maxLength={13} name="isbn13" id="isbn13" required={false} label={"ISBN 13"} />
-            <TextInput minLength={2} maxLength={1000} name="author" id="author" required={true} label={"Authors(comma separated)"} />
+            <TextInput minLength={2} maxLength={1000} name="authors" id="authors" required={true} label={"Authors(comma separated)"} />
             {
                 copies.length === 0 && <Note message="You can add copies later or scan QR code to add copies now." />
             }
@@ -39,7 +76,7 @@ const NewBookForm = () => {
                 className="scan-copy-qr-button"
                 onClick={toggleCopyQRReader}
                 aria-label="Scan book"
-                style={{marginTop: "10px", marginBlock: "10px"}}
+                style={{ marginTop: "10px", marginBlock: "10px" }}
             >
                 <QrCodeIcon size={22} />
                 <span>Scan Copy QR</span>
@@ -49,6 +86,19 @@ const NewBookForm = () => {
                 onError={toggleCopyQRReader}
                 opened={showCopyQRReader}
                 onCancel={toggleCopyQRReader} />
+            {validationError && (
+                <div style={{
+                    color: "#d32f2f",
+                    backgroundColor: "#ffebee",
+                    padding: "12px",
+                    borderRadius: "4px",
+                    border: "1px solid #ffcdd2",
+                    marginTop: "8px",
+                    fontSize: "14px"
+                }}>
+                    {validationError}
+                </div>
+            )}
             <button type="submit"
                 style={{
                     position: "fixed",
@@ -63,6 +113,19 @@ const NewBookForm = () => {
                     cursor: "pointer",
                     backgroundColor: "#fff"
                 }}>Add Book</button>
+            <Snackbar
+                message={"Successfully added book!"}
+                type={"success"}
+                isOpen={showSuccess}
+                onClose={() => setShowSuccess(false)}
+            />
+            <Snackbar
+                message={"Failed to add book!"}
+                type={"error"}
+                isOpen={showError}
+                onClose={() => setShowError(false)}
+            />
+            {loading && <LoadingView />}
 
         </form>
     );
