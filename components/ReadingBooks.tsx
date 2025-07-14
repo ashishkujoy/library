@@ -1,17 +1,9 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { Virtuoso } from 'react-virtuoso';
-import { BorrowedBook } from '../types/BorrowedBook';
-import BookCover from './BookCover';
-import { formatBorrowDate, isOverdue } from '../utils/dateUtils';
 import "../styles/BookRow.css";
-
-const LoadingFooter = (props: { context: { loadingMore: boolean } }) => {
-    if (props.context.loadingMore)
-        return <h6 style={{ textAlign: "center" }}>Loading More...</h6>;
-
-    return <></>;
-};
+import { BorrowedBook } from '../types/BorrowedBook';
+import { formatBorrowDate } from '../utils/dateUtils';
+import BookCover from './BookCover';
 
 type ReadingBookRowProps = {
     book: BorrowedBook;
@@ -19,8 +11,6 @@ type ReadingBookRowProps = {
 };
 
 const ReadingBookDetails = ({ book }: { book: BorrowedBook }) => {
-    const overdueStatus = isOverdue(book.dueDate);
-
     return (
         <div className="reading-book-details">
             <h3 className="reading-book-title">
@@ -36,20 +26,6 @@ const ReadingBookDetails = ({ book }: { book: BorrowedBook }) => {
                     <span className="reading-info-label">Borrowed:</span>
                     <span className="reading-info-value">{formatBorrowDate(book.borrowedDate)}</span>
                 </div>
-
-                {book.dueDate && (
-                    <div className={`reading-info-item ${overdueStatus ? 'overdue' : ''}`}>
-                        <span className="reading-info-label">Due:</span>
-                        <span className="reading-info-value">
-                            {new Date(book.dueDate).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric'
-                            })}
-                            {overdueStatus && <span className="overdue-badge">Overdue</span>}
-                        </span>
-                    </div>
-                )}
             </div>
         </div>
     );
@@ -72,11 +48,10 @@ const ReadingBookRow = ({ book, index }: ReadingBookRowProps) => {
 
 const ReadingBooks = () => {
     const [books, setBooks] = useState<BorrowedBook[] | undefined>();
-    const [lastScrollPosition, setLastScrollPosition] = useState(0);
     const [loadingMore, setLoadingMore] = useState(false);
 
-    const loadMore = async (lastSeenBookId: number) => {
-        const response = await fetch(`/api/reading?lastSeenId=${lastSeenBookId}&size=20`);
+    const loadBooks = async () => {
+        const response = await fetch("/api/reading");
         if (!response.ok) {
             console.error("Failed to fetch reading books:", response.statusText);
             return;
@@ -91,7 +66,7 @@ const ReadingBooks = () => {
     useEffect(() => {
         if (books === undefined && !loadingMore) {
             setLoadingMore(true);
-            loadMore(0)
+            loadBooks()
                 .finally(() => setLoadingMore(false));
         }
     }, [books, loadingMore]);
@@ -126,23 +101,7 @@ const ReadingBooks = () => {
                 maxWidth: '100%',
                 marginBottom: 'clamp(60px, 15vw, 80px)'
             }}>
-                <Virtuoso
-                    style={{ height: "100%" }}
-                    data={books}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    onScroll={(e) => (setLastScrollPosition((e.target as any).scrollTop))}
-                    initialScrollTop={lastScrollPosition}
-                    endReached={async () => {
-                        setLoadingMore(true);
-                        await loadMore(books[books.length - 1].id);
-                        setLoadingMore(false);
-                    }}
-                    context={{ loadingMore }}
-                    components={{ Footer: LoadingFooter }}
-                    itemContent={(index, book) => {
-                        return <ReadingBookRow key={book.id} book={book} index={index} />;
-                    }}
-                />
+                {books.map((book, index) => <ReadingBookRow key={book.id} book={book} index={index} />)}
             </div>
         </div>
     );

@@ -28,8 +28,3 @@ export const formatBorrowDate = (borrowedDate: string): string => {
     
     return `${formattedDate} (${timeAgo} ago)`;
 };
-
-export const isOverdue = (dueDate?: string): boolean => {
-    if (!dueDate) return false;
-    return new Date(dueDate) < new Date();
-};
