@@ -1,6 +1,7 @@
 import NeonAdapter from '@auth/neon-adapter';
 import { AuthOptions } from 'next-auth';
 import Google from 'next-auth/providers/google';
+import { checkUserExists } from '../../../db/user';
 import { pool } from './db';
 
 export type User = {
@@ -22,5 +23,12 @@ export const authOptions: AuthOptions = {
     ],
     session: {
         strategy: 'database',
+    },
+    callbacks: {
+        async signIn({ profile }) {
+            const email = profile?.email;
+            if (!email) return false;
+            return checkUserExists(email);
+        },
     }
 };

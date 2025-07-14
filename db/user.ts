@@ -24,3 +24,11 @@ export const getLoggedInUser = async (): Promise<User | null> => {
         isAdmin: user[0].isAdmin,
     };
 }
+
+export const checkUserExists = async (email: string): Promise<boolean> => {
+    const sql = neon(`${process.env.DATABASE_URL}`);
+    const user = await sql`
+        SELECT id FROM library_users WHERE email = ${email} LIMIT 1;
+    `;
+    return user.length > 0;
+}
