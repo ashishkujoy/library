@@ -1,12 +1,12 @@
 "use client";
-import ReadingBooks from "../../../components/ReadingBooks";
-import FloatingActionButtons from "../../../components/FloatingActionButtons";
-import StickyFooter from "../../../components/StickyFooter";
 import { useEffect, useState } from "react";
-import { useSnackbar } from "../../../utils/useSnackbar";
+import FloatingActionButtons from "../../../components/FloatingActionButtons";
+import LoaderOverlay from "../../../components/LoaderOverlay";
+import ReadingBooks from "../../../components/ReadingBooks";
 import Snackbar from "../../../components/Snackbar";
-import LoadingView from "../loading";
+import StickyFooter from "../../../components/StickyFooter";
 import { BorrowedBook } from "../../../types/BorrowedBook";
+import { useSnackbar } from "../../../utils/useSnackbar";
 
 export default function ReadingPage() {
   const [books, setBooks] = useState<BorrowedBook[] | undefined>();
@@ -52,12 +52,9 @@ export default function ReadingPage() {
       .finally(() => setLoading(false));
   }
 
-  if (loading) {
-    return <LoadingView />;
-  }
-
   return (
     <div style={{ paddingBottom: '80px' }}>
+      {loading && <LoaderOverlay title="Loading" message="Please wait while we process your request..." />}
       <ReadingBooks books={books} />
       <FloatingActionButtons onScanResult={returnBook} onScanError={() => showError("Failed to scan qr code try again")} />
       <StickyFooter activeTab="reading" />

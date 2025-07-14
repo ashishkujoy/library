@@ -2,14 +2,14 @@
 import { QrCodeIcon } from "lucide-react";
 import { FormEvent, useState } from "react";
 import BarcodeScanner from "../../../../components/BarcodeScanner";
+import FloatingActionButtons from "../../../../components/FloatingActionButtons";
+import LabelStack from "../../../../components/LabelStack";
+import LoaderOverlay from "../../../../components/LoaderOverlay";
 import Note from "../../../../components/Note";
+import Snackbar from "../../../../components/Snackbar";
 import StickyFooter from "../../../../components/StickyFooter";
 import TextInput from "../../../../components/TextInput";
-import LabelStack from "../../../../components/LabelStack";
 import './page.css';
-import Snackbar from "../../../../components/Snackbar";
-import LoadingView from "@/app/loading";
-import FloatingActionButtons from "../../../../components/FloatingActionButtons";
 
 type BookDetails = {
     title: string;
@@ -92,7 +92,7 @@ const NewBookForm = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            {loading && <LoadingView />}
+            {loading && <LoaderOverlay title="Loading" message="Please wait while we process your request..." />}
 
             <TextInput
                 minLength={2}
@@ -211,8 +211,6 @@ export default function ManagePage() {
                 <Note message="Please fill the form OR scan code" />
                 <NewBookForm />
             </div>
-
-            <StickyFooter activeTab="books" />
         </div>
     );
 }

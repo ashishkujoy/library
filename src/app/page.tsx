@@ -1,13 +1,13 @@
 "use client";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Books from "../../components/BookRow";
 import FloatingActionButtons from "../../components/FloatingActionButtons";
+import LoaderOverlay from "../../components/LoaderOverlay";
 import Searchbar from "../../components/Searchbar";
+import Snackbar from "../../components/Snackbar";
 import StickyFooter from "../../components/StickyFooter";
 import { useSnackbar } from "../../utils/useSnackbar";
-import Snackbar from "../../components/Snackbar";
-import LoadingView from "./loading";
-import { useSession } from "next-auth/react";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -36,12 +36,9 @@ export default function Home() {
       .finally(() => setLoading(false));
   };
 
-  if (loading) {
-    return <LoadingView />;
-  }
-
   return (
     <div style={{ paddingBottom: '80px' }}>
+      {loading && <LoaderOverlay title="Loading" message="Please wait while we process your request..." />}
       <Searchbar />
       <Books />
       <FloatingActionButtons onScanResult={borrowBook} onScanError={showError} showManage={isAdmin} />
