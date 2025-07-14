@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import LoadingView from '@/app/loading';
 import "../styles/BookRow.css";
 import { BorrowedBook } from '../types/BorrowedBook';
 import { formatBorrowDate } from '../utils/dateUtils';
@@ -46,41 +46,14 @@ const ReadingBookRow = ({ book, index }: ReadingBookRowProps) => {
     );
 };
 
-const ReadingBooks = () => {
-    const [books, setBooks] = useState<BorrowedBook[] | undefined>();
-    const [loadingMore, setLoadingMore] = useState(false);
-
-    const loadBooks = async () => {
-        const response = await fetch("/api/reading");
-        if (!response.ok) {
-            console.error("Failed to fetch reading books:", response.statusText);
-            return;
-        }
-        const newBooks: BorrowedBook[] = await response.json();
-        if (newBooks.length > 0) {
-            setBooks((books || []).concat(newBooks));
-            return;
-        }
-    };
-
-    useEffect(() => {
-        if (books === undefined && !loadingMore) {
-            setLoadingMore(true);
-            loadBooks()
-                .finally(() => setLoadingMore(false));
-        }
-    }, [books, loadingMore]);
-
-    if (books === undefined) {
+const ReadingBooks = (props: { books?: BorrowedBook[] }) => {
+    if (props.books === undefined) {
         return (
-            <div className="reading-loading">
-                <div className="loading-spinner"></div>
-                <p>Loading your reading list...</p>
-            </div>
+            <LoadingView />
         );
     }
 
-    if (books.length === 0) {
+    if (props.books.length === 0) {
         return (
             <div className="reading-empty">
                 <div className="empty-state">
@@ -101,7 +74,7 @@ const ReadingBooks = () => {
                 maxWidth: '100%',
                 marginBottom: 'clamp(60px, 15vw, 80px)'
             }}>
-                {books.map((book, index) => <ReadingBookRow key={book.id} book={book} index={index} />)}
+                {props.books.map((book, index) => <ReadingBookRow key={book.id} book={book} index={index} />)}
             </div>
         </div>
     );

@@ -2,14 +2,36 @@
 import ReadingBooks from "../../../components/ReadingBooks";
 import FloatingActionButtons from "../../../components/FloatingActionButtons";
 import StickyFooter from "../../../components/StickyFooter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSnackbar } from "../../../utils/useSnackbar";
 import Snackbar from "../../../components/Snackbar";
 import LoadingView from "../loading";
+import { BorrowedBook } from "../../../types/BorrowedBook";
 
 export default function ReadingPage() {
+  const [books, setBooks] = useState<BorrowedBook[] | undefined>();
   const [loading, setLoading] = useState(false);
   const { snackbar, showSuccess, showError, close } = useSnackbar();
+
+  useEffect(() => {
+    if (books === undefined) {
+      setLoading(true);
+      fetch("/api/reading")
+        .then(res => res.json().then(body => ({ body, status: res.status })))
+        .then(({ body, status }) => {
+          if (status === 200) {
+            setBooks(body);
+          } else {
+            showError(`Failed to load reading list: ${body.message}`);
+          }
+        })
+        .catch(() => {
+          showError("Failed to load reading list. Please try again.");
+        }).finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [books]);
 
   const returnBook = (result: string) => {
     setLoading(true);
@@ -36,7 +58,7 @@ export default function ReadingPage() {
 
   return (
     <div style={{ paddingBottom: '80px' }}>
-      <ReadingBooks />
+      <ReadingBooks books={books} />
       <FloatingActionButtons onScanResult={returnBook} onScanError={() => showError("Failed to scan qr code try again")} />
       <StickyFooter activeTab="reading" />
       <Snackbar
