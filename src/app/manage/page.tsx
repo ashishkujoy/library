@@ -1,7 +1,6 @@
 "use client";
 import { BookOpenCheckIcon, CopyPlusIcon } from "lucide-react";
 import StickyFooter from "../../../components/StickyFooter";
-import "./page.css";
 
 type ListProps = {
     label: string;
