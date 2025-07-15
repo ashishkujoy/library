@@ -2,28 +2,25 @@
 import { QrCodeIcon } from "lucide-react";
 import { useState } from "react";
 import BarcodeScanner from "./BarcodeScanner";
+import PrimaryButton from "./PrimaryButton";
 
 type ScannerProps = {
     onScanResult: (result: string) => void;
     onScanError: (error: string) => void;
+    title?: string;
     className?: string;
 }
 
-const Scanner = ({ onScanResult, onScanError, className = "" }: ScannerProps) => {
+const Scanner = ({ onScanResult, onScanError, className = "", title = "Scan" }: ScannerProps) => {
     const [showScanner, setShowScanner] = useState(false);
     const toggleShowScanner = () => setShowScanner(!showScanner);
 
     return (
         <div>
             <div className={className}>
-                <button
-                    className="floating-btn floating-btn-scan"
-                    onClick={toggleShowScanner}
-                    aria-label="Scan book"
-                    title="Scan book barcode"
-                >
+                <PrimaryButton onClick={toggleShowScanner} title={title}>
                     <QrCodeIcon size={22} />
-                </button>
+                </PrimaryButton>
             </div>
             <BarcodeScanner
                 onResult={(scanResult) => {

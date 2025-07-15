@@ -5,7 +5,6 @@ import Scanner from "@/components/Scanner";
 import Snackbar from "@/components/Snackbar";
 import { useSnackbar } from "../../utils/useSnackbar";
 import { borrowBook } from "./BooksApi";
-import "@/styles/FloatingActionButtons.css";
 
 
 const BorrowBook = () => {

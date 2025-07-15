@@ -7,7 +7,7 @@ export default async function ReadingPage() {
   const books = await loadReadingBooks();
 
   return (
-    <div style={{ paddingBottom: '80px' }}>
+    <div className='page-container'>
       <ReadingBooks books={books} />
       <ReturnBook />
       <StickyFooter activeTab="reading" />

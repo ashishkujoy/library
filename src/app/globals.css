@@ -29,3 +29,7 @@
 .app-child {
   margin-top: 70px;
 }
+
+.page-container {
+  padding-bottom: '80px'
+}
