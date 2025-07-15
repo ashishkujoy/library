@@ -41,16 +41,20 @@ const NewBookForm = () => {
 
     function handleSubmit(event: FormEvent<HTMLFormElement>): void {
         event.preventDefault();
-        const data = Object.fromEntries(new FormData(event.currentTarget).entries());
+        const form = event.currentTarget;
+        const data = Object.fromEntries(new FormData(form).entries());
 
         // Clear any previous validation errors
         setValidationError("");
 
         // Validate that at least one ISBN is provided
-        const isbn10 = data.isbn10 as string;
-        const isbn13 = data.isbn13 as string;
+        const isbn10 = (data.isbn10 as string).trim();
+        const isbn13 = (data.isbn13 as string).trim();
 
-        if (!isbn10?.trim() && !isbn13?.trim()) {
+        if (!isbn10) delete data.isbn10;
+        if (!isbn13) delete data.isbn13;
+
+        if (!isbn10 && !isbn13) {
             setValidationError("Please provide at least one ISBN (ISBN 10 or ISBN 13)");
             return;
         }
@@ -63,10 +67,14 @@ const NewBookForm = () => {
             body: JSON.stringify({ ...data, copies }),
         })
             .then(res => {
-                const fn = res.ok ? setShowSuccess : setShowError;
-                fn(true);
+                if (res.ok) {
+                    console.log("Book added successfully");
+                    setShowSuccess(true);
+                    return form.reset();
+                }
+                setShowError(true);
             })
-            .catch(() => setShowError(true))
+            .catch((e) => console.log("Error adding book:", e))
             .finally(() => setLoading(false));
     }
 
@@ -165,7 +173,7 @@ const NewBookForm = () => {
                     <QrCodeIcon size={22} />
                     <span>Scan Book Barcode</span>
                 </button>
-                <button type="button"
+                <button type="submit"
                     title="Scan book barcode"
                     className="scan-copy-qr-button"
                     aria-label="Scan book"

@@ -71,6 +71,7 @@ const addCopies = async (sql: SQL, bookId: number, copies: string[]) => {
         await sql`
             INSERT INTO book_copies (book_id, qr_code)
             VALUES (${bookId}, ${copy})
+            ON CONFLICT (qr_code) DO NOTHING
         `;
     }
     if (copies.length > 0) {
