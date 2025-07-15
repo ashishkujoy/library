@@ -40,6 +40,12 @@ export default function ManagePage() {
                     href="/manage/add-book"
                 />
                 <ListItem
+                    label="Generate Book QR Code"
+                    description="Generate a QR code for a book to easily share its details"
+                    icon={<CopyPlusIcon size={20} color="var(--main-color)" />}
+                    href="/manage/generate-qr-code"
+                />
+                <ListItem
                     label="View All Borrowed Books"
                     description="See all books currently borrowed by users"
                     icon={<BookOpenCheckIcon size={20} color="var(--main-color)" />}
