@@ -25,3 +25,21 @@ export const loadBooksAfter = async (lastSeenBookId: number, size: number = 20) 
         return { success: false, data: { message: "Failed to load books. Please try again." } };
     }
 }
+
+export const returnBook = async (barcode: string) => {
+    try {
+        const response = await fetch("/api/books/return", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ barcode }),
+        });
+
+        const body = await response.json();
+        return { success: response.ok, data: body };
+    } catch (error) {
+        console.error("Error returning book:", error);
+        return { success: false, data: { message: "Failed to return book. Please try again." } };
+    }
+}
