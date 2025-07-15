@@ -2,10 +2,11 @@ import { BookOpenTextIcon, LibraryIcon, ListPlusIcon } from "lucide-react";
 import Link from "next/link";
 import "../styles/StickyFooter.css";
 
-type FooterTab = 'books' | 'reading' | 'request';
+type FooterTab = 'books' | 'reading' | 'request' | 'manage';
 
 interface StickyFooterProps {
     activeTab: FooterTab;
+    allowManagement: boolean;
 }
 
 type TabItemProps = {
@@ -51,6 +52,12 @@ const StickyFooter = ({ activeTab = 'books' }: StickyFooterProps) =>
                 icon={<ListPlusIcon />}
                 href="/request"
                 isActive={activeTab === 'request'}
+            />
+            <TabItem
+                label="Manage"
+                icon={<ListPlusIcon />}
+                href="/manage"
+                isActive={activeTab === 'manage'}
             />
         </div>
     </div>

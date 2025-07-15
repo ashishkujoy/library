@@ -47,7 +47,7 @@ export default function ManagePage() {
                 />
             </div>
 
-            <StickyFooter activeTab="books" />
+            <StickyFooter activeTab="books" allowManagement/>
         </div>
     );
 }
