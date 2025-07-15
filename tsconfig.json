@@ -23,9 +23,15 @@
       }
     ],
     "paths": {
+      "@/components/*": [
+        "./components/*"
+      ],
+      "@/styles/*": [
+        "./styles/*"
+      ],
       "@/*": [
         "./src/*"
-      ]
+      ],
     },
     "typeRoots": [
       "./types",
