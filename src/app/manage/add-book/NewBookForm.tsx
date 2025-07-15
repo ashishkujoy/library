@@ -6,7 +6,7 @@ import Note from "@/components/Note";
 import Snackbar from "@/components/Snackbar";
 import TextInput from "@/components/TextInput";
 import { QrCodeIcon } from "lucide-react";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef } from "react";
 
 type BookDetails = {
     title: string;
@@ -29,6 +29,7 @@ const NewBookForm = () => {
         isbn10: "",
         isbn13: "",
     });
+    const formRef = useRef<HTMLFormElement>(null);
 
     const toggleCopyQRReader = () => setShowCopyQRReader(!showCopyQRReader);
     const toggleBookQRReader = () => setShowBookQRReader(!showBookQRReader);
@@ -70,6 +71,14 @@ const NewBookForm = () => {
                 if (res.ok) {
                     console.log("Book added successfully");
                     setShowSuccess(true);
+                    formRef.current?.reset();
+                    setBookDetails({
+                        title: "",
+                        authors: "",
+                        isbn10: "",
+                        isbn13: "",
+                    });
+                    setCopies([]);
                     return form.reset();
                 }
                 setShowError(true);
@@ -99,7 +108,7 @@ const NewBookForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} ref={formRef}>
             {loading && <LoaderOverlay title="Loading" message="Please wait while we process your request..." />}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 
