@@ -5,8 +5,9 @@
   border-radius: 9999px;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
-  white-space: nowrap;
+  white-space: wrap;
   position: relative;
+  max-width: 80vw;
 }
 
 /* Size variants */
