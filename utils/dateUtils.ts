@@ -23,7 +23,7 @@ export const formatBorrowDate = (borrowedDate: string): string => {
     } else if (daysDiff > 0) {
         timeAgo = `${daysDiff} day${daysDiff > 1 ? 's' : ''}`;
     } else {
-        timeAgo = 'today';
+        return `${formattedDate} (today)`;
     }
     
     return `${formattedDate} (${timeAgo} ago)`;

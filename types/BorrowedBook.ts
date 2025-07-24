@@ -4,3 +4,15 @@ export type BorrowedBook = {
     authors: string;
     borrowedDate: string;
 };
+
+
+export type BorrowedBookWithUser = {
+    id: number;
+    title: string;
+    authors: string;
+    borrowedDate: string;
+    borrowerName: string;
+    borrowerEmail: string;
+    bookCopyId: number;
+    qrCode: string;
+};
