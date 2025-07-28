@@ -8,11 +8,12 @@ const Searchbar = (props: { value: string; onChange: (s: string) => void; onSear
         props.onChange(value);
     }
 
-    const onClick = () => {
-        console.log("Search clicked");
-        props.onSearch();
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            props.onSearch();
+        }
     }
-
+    
     return (
         <div className="search-bar">
             <input
@@ -20,9 +21,10 @@ const Searchbar = (props: { value: string; onChange: (s: string) => void; onSear
                 placeholder="Search..."
                 value={props.value}
                 onChange={handleChange}
+                onKeyDown={handleKeyDown}
                 className="search-input"
             />
-            <Search className="search-icon" size={20} onClick={onClick} />
+            <Search className="search-icon" size={20} onClick={props.onSearch} />
         </div>
     )
 }
