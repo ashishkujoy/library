@@ -16,9 +16,10 @@ export const borrowBook = async (barcode: string) => {
     }
 }
 
-export const loadBooksAfter = async (lastSeenBookId: number, size: number = 20) => {
+export const loadBooksAfter = async (searchQuery: string, lastSeenBookId: number, size: number = 20) => {
     try {
-        const response = await fetch(`/api/books?lastSeenId=${lastSeenBookId}&size=${size}`);
+        const search = `search=${encodeURIComponent(searchQuery)}`
+        const response = await fetch(`/api/books?lastSeenId=${lastSeenBookId}&size=${size}&${search}`);
         const body = await response.json();
         return { success: response.ok, data: body };
     } catch {

@@ -4,47 +4,77 @@ import { OnboardBookReqBody } from '../types/OnboardBookReqBody';
 
 type SQL = NeonQueryFunction<false, false>;
 
-const getBooksFirstPage = async (sql: SQL, size: number): Promise<Book[]> => {
-    const books = await sql`
-        SELECT 
-            id,
-            title,
-            authors,
-            isbn10,
-            isbn13,
-            count,
-            borrowed_count as "borrowedCount"
-        FROM books 
-        ORDER BY id 
-        LIMIT ${size}
-    `;
+const getBooksFirstPage = async (sql: SQL, searchQuery: string, size: number): Promise<Book[]> => {
+    const books = searchQuery.trim() 
+        ? await sql`
+            SELECT 
+                id,
+                title,
+                authors,
+                isbn10,
+                isbn13,
+                count,
+                borrowed_count as "borrowedCount"
+            FROM books 
+            WHERE title ILIKE ${'%' + searchQuery + '%'}
+            ORDER BY id 
+            LIMIT ${size}
+        `
+        : await sql`
+            SELECT 
+                id,
+                title,
+                authors,
+                isbn10,
+                isbn13,
+                count,
+                borrowed_count as "borrowedCount"
+            FROM books 
+            ORDER BY id 
+            LIMIT ${size}
+        `;
     return books as Book[];
 };
 
-const getBooksAfterCursor = async (sql: NeonQueryFunction<false, false>, size: number, lastSeenId: string): Promise<Book[]> => {
-    const books = await sql`
-        SELECT 
-            id,
-            title,
-            authors,
-            isbn10,
-            isbn13,
-            count,
-            borrowed_count as "borrowedCount"
-        FROM books 
-        WHERE id > ${parseInt(lastSeenId)}
-        ORDER BY id 
-        LIMIT ${size}
-    `;
+const getBooksAfterCursor = async (sql: SQL, searchQuery: string, size: number, lastSeenId: string): Promise<Book[]> => {
+    const books = searchQuery.trim()
+        ? await sql`
+            SELECT 
+                id,
+                title,
+                authors,
+                isbn10,
+                isbn13,
+                count,
+                borrowed_count as "borrowedCount"
+            FROM books 
+            WHERE id > ${parseInt(lastSeenId)} AND title ILIKE ${'%' + searchQuery + '%'}
+            ORDER BY id 
+            LIMIT ${size}
+        `
+        : await sql`
+            SELECT 
+                id,
+                title,
+                authors,
+                isbn10,
+                isbn13,
+                count,
+                borrowed_count as "borrowedCount"
+            FROM books 
+            WHERE id > ${parseInt(lastSeenId)}
+            ORDER BY id 
+            LIMIT ${size}
+        `;
     return books as Book[];
 };
 
-export const getBooks = async (size: number, lastSeenId?: string): Promise<Book[]> => {
+export const getBooks = async (searchQuery: string, size: number, lastSeenId?: string): Promise<Book[]> => {
     const sql = neon(`${process.env.DATABASE_URL}`);
 
     return lastSeenId
-        ? await getBooksAfterCursor(sql, size, lastSeenId)
-        : await getBooksFirstPage(sql, size);
+        ? await getBooksAfterCursor(sql, searchQuery, size, lastSeenId)
+        : await getBooksFirstPage(sql, searchQuery, size);
 }
 
 const findExistingBookId = async (sql: SQL, isbn10?: string, isbn13?: string): Promise<number | undefined> => {

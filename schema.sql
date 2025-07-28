@@ -1,3 +1,6 @@
+-- Enable extensions for better text search performance
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
 CREATE TABLE IF NOT EXISTS books (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -95,6 +98,10 @@ CREATE INDEX IF NOT EXISTS idx_library_users_email ON library_users(email);
 
 -- Books table indexes
 CREATE INDEX IF NOT EXISTS idx_books_title ON books(title);
+-- Text search index for fuzzy search performance
+CREATE INDEX IF NOT EXISTS idx_books_title_gin ON books USING gin(title gin_trgm_ops);
+-- Composite index for pagination with search
+CREATE INDEX IF NOT EXISTS idx_books_id_title ON books(id, title);
 CREATE INDEX IF NOT EXISTS idx_books_isbn10 ON books(isbn10);
 CREATE INDEX IF NOT EXISTS idx_books_isbn13 ON books(isbn13);
 

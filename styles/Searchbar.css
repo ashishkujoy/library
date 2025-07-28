@@ -31,7 +31,7 @@
   position: absolute;
   right: 16px;
   color: #6b7280;
-  pointer-events: none;
+  cursor: pointer;
   transition: color 0.2s ease-in-out;
 }
 

@@ -1,5 +1,4 @@
 import Books from "../../components/Books";
-import Searchbar from "../../components/Searchbar";
 import StickyFooter from "../../components/StickyFooter";
 import { getLoggedInUser } from "../../db/user";
 import { loadBooks } from "./action";
@@ -10,7 +9,6 @@ export default async function Home() {
 
   return (
     <div style={{ paddingBottom: '80px' }}>
-      <Searchbar />
       <Books books={books} />
       <BorrowBook />
       <StickyFooter activeTab="books" allowManagement={user?.isAdmin || false} />
