@@ -31,7 +31,7 @@ const TabItem = (props: TabItemProps) => {
     )
 }
 
-const StickyFooter = ({ activeTab = 'books' }: StickyFooterProps) =>
+const StickyFooter = ({ activeTab = 'books', allowManagement = false }: StickyFooterProps) =>
 (
     <div className="sticky-footer">
         <div className="footer-container">
@@ -53,12 +53,16 @@ const StickyFooter = ({ activeTab = 'books' }: StickyFooterProps) =>
                 href="/request"
                 isActive={activeTab === 'request'}
             />
-            <TabItem
-                label="Manage"
-                icon={<ListPlusIcon />}
-                href="/manage"
-                isActive={activeTab === 'manage'}
-            />
+            {
+                allowManagement && (
+                    <TabItem
+                        label="Manage"
+                        icon={<ListPlusIcon />}
+                        href="/manage"
+                        isActive={activeTab === 'manage'}
+                    />
+                )
+            }
         </div>
     </div>
 );
