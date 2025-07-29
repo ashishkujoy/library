@@ -12,9 +12,20 @@ export const POST = async (req: Request) => {
             }
         });
     }
+    console.log("Borrowing book for user:", user.name, "with barcode:", barcode);
 
     try {
-        await borrowBook(user.id, barcode);
+        const result = await borrowBook(user.id, barcode);
+        if (!result.success) {
+            console.error("Failed to borrow book:", result.message);
+            return new Response(JSON.stringify({ message: result.message }), {
+                status: 400,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        }
+        console.log("Book borrowed successfully for user:", user.name, "with barcode:", barcode);
         return new Response(JSON.stringify({ message: "Borrowed book successfully" }), {
             status: 200,
             headers: {
