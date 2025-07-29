@@ -1,16 +1,28 @@
 import { neon, NeonQueryFunction } from "@neondatabase/serverless";
 import { Book } from "../../../../types/Book";
+import { findBook } from "./books-archeive";
 
 type SQL = NeonQueryFunction<false, false>;
 
 const findBookByIsbn = async (sql: SQL, isbn: string): Promise<Book> => {
-    console.log("Searching for book with ISBN:", isbn);
     const rows = await sql`SELECT * FROM books_db WHERE isbn10 = ${isbn} OR isbn13 = ${isbn} LIMIT 1`;
     if (rows.length === 0) {
-        console.log("No book found with the provided ISBN.", isbn);
-        throw new Error("Book not found");
+        const book = await findBook(isbn);
+        if (!book) {
+            console.log("No book found with the provided ISBN.", isbn);
+            throw new Error("Book not found");
+        }
+        return {
+            id: -1,
+            title: book.title,
+            authors: book.authors,
+            isbn10: book.isbn10,
+            isbn13: book.isbn13,
+            borrowedCount: 0,
+            count: 0,
+        }
     }
-    console.log("Book found:", rows[0]);
+
     return {
         id: rows[0].id,
         title: rows[0].title,
