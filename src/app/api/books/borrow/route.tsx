@@ -13,15 +13,6 @@ export const POST = async (req: Request) => {
         });
     }
 
-    if (!user.isAdmin) {
-        return new Response(JSON.stringify({ message: "Unauthorized action" }), {
-            status: 403,
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-    }
-
     try {
         await borrowBook(user.id, barcode);
         return new Response(JSON.stringify({ message: "Borrowed book successfully" }), {
