@@ -1,9 +1,15 @@
 import { NextRequest } from 'next/server';
 import { loadBooksWithSearch } from "../../action";
+import { getUserFromHeaders } from "../../../../utils/userHeaders";
 
 export async function GET(request: NextRequest) {
     const startTime = Date.now();
-    console.log(`[API] GET /api/books - Request started`);
+    
+    // Get user information for logging (optional, since this doesn't require user-specific data)
+    const user = getUserFromHeaders(request.headers);
+    const userContext = user ? ` by user ${user.email}` : '';
+    
+    console.log(`[API] GET /api/books - Request started${userContext}`);
     
     try {
         // Use Next.js 15 searchParams API
@@ -39,7 +45,7 @@ export async function GET(request: NextRequest) {
         const books = await loadBooksWithSearch(decodedSearchQuery, lastSeenId || undefined, size);
         
         const duration = Date.now() - startTime;
-        console.log(`[API] GET /api/books - Success: ${books.length} books returned in ${duration}ms`);
+        console.log(`[API] GET /api/books - Success: ${books.length} books returned in ${duration}ms${userContext}`);
         
         return Response.json(books, {
             headers: {

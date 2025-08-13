@@ -1,24 +1,14 @@
+import { NextRequest } from "next/server";
 import { getBorrowedBooks } from "../../../../db/borrowedBooks";
-import { getLoggedInUser } from "../../../../db/user";
+import { requireUserFromHeaders } from "../../../../utils/userHeaders";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     const startTime = Date.now();
     console.log(`[API] GET /api/reading - Request started`);
     
     try {
-        // Check user authentication
-        const user = await getLoggedInUser();
-        if (!user) {
-            console.log(`[API] GET /api/reading - User not authenticated`);
-            return Response.json(
-                { error: "Authentication required", message: "User not logged in" },
-                { status: 401 }
-            );
-        }
-        
-        console.log(`[API] GET /api/reading - User: ${user.name} (ID: ${user.id})`);
-        
-        // Fetch borrowed books for the user
+        // Get user information from middleware headers (more efficient)
+        const user = requireUserFromHeaders(request.headers);
         const borrowedBooks = await getBorrowedBooks(user.id);
         
         const duration = Date.now() - startTime;
