@@ -1,19 +1,36 @@
 import '@/styles/QRCode.css';
 import Image from 'next/image';
-import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
+import LoadingSpinner from './LoadingSpinner';
 
 const QRCodeCard = ({ title }: { title: string }) => {
     const [uri, setUri] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        (async () => setUri(await QRCode.toDataURL(title)))();
+        const generateQRCode = async () => {
+            try {
+                setIsLoading(true);
+                // Dynamic import of qrcode library
+                const QRCode = await import('qrcode');
+                const dataUrl = await QRCode.default.toDataURL(title);
+                setUri(dataUrl);
+            } catch (error) {
+                console.error('Failed to generate QR code:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        generateQRCode();
     }, [title]);
 
-    if (!uri) {
-        <div style={{ width: 190, height: 190 }}>
-            loading...
-        </div>
+    if (isLoading) {
+        return (
+            <div style={{ width: 190, height: 190, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <LoadingSpinner size="medium" />
+            </div>
+        );
     }
 
     return (

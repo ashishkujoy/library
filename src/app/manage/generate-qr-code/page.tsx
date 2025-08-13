@@ -1,10 +1,16 @@
 "use client";
 import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import dynamic from "next/dynamic";
 
-import QRCodes from "@/components/QRCodes";
+// Dynamic import for QRCodes component to reduce bundle size
+const QRCodes = dynamic(() => import("@/components/QRCodes"), {
+    loading: () => <LoadingSpinner size="large" message="Loading QR generator..." />,
+    ssr: false
+});
 
 export default function GenerateQRCodePage() {
     const [qrCount, setQrCount] = useState("0");
