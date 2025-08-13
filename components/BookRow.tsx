@@ -1,3 +1,4 @@
+import React, { memo, useMemo } from 'react';
 import { Book } from "@/types/Book";
 import BookCover from "./BookCover";
 
@@ -6,8 +7,16 @@ type BookRowProps = {
     index: number;
 };
 
-const BookDetails = ({ book }: { book: Book }) => {
-    const availableCount = book.count - book.borrowedCount;
+const BookDetails = memo(({ book }: { book: Book }) => {
+    // Memoize expensive calculations
+    const { availableCount, borrowedClass, availableClass } = useMemo(() => {
+        const available = book.count - book.borrowedCount;
+        return {
+            availableCount: available,
+            borrowedClass: `book-stat book-stat-borrowed ${book.borrowedCount === 0 ? 'none' : ''}`,
+            availableClass: `book-stat book-stat-available ${available === 0 ? 'none' : ''}`
+        };
+    }, [book.count, book.borrowedCount]);
 
     return (
         <div className="book-row-details">
@@ -25,21 +34,23 @@ const BookDetails = ({ book }: { book: Book }) => {
                     <span>{book.count}</span>
                 </div>
 
-                <div className={`book-stat book-stat-borrowed ${book.borrowedCount === 0 ? 'none' : ''}`}>
+                <div className={borrowedClass}>
                     <span className="book-stat-label">Borrowed:</span>
                     <span>{book.borrowedCount}</span>
                 </div>
 
-                <div className={`book-stat book-stat-available ${availableCount === 0 ? 'none' : ''}`}>
+                <div className={availableClass}>
                     <span className="book-stat-label">Available:</span>
                     <span>{availableCount}</span>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+});
 
-const BookRow = ({ book, index }: BookRowProps) => {
+BookDetails.displayName = 'BookDetails';
+
+const BookRow = memo(({ book, index }: BookRowProps) => {
     return (
         <div className="book-row">
             <div className="book-row-cover">
@@ -50,9 +61,10 @@ const BookRow = ({ book, index }: BookRowProps) => {
                 />
             </div>
             <BookDetails book={book} />
-
         </div>
     );
-};
+});
+
+BookRow.displayName = 'BookRow';
 
 export default BookRow;

@@ -1,0 +1,77 @@
+/* BookRowSkeleton.css - Skeleton loading animations */
+
+.skeleton-container {
+    pointer-events: none;
+    user-select: none;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f8f9fa 25%, #e9ecef 50%, #f8f9fa 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Book cover skeleton */
+.skeleton-cover {
+    width: 80px;
+    height: 120px;
+    border-radius: 8px;
+}
+
+/* Title skeleton */
+.skeleton-title {
+    height: 20px;
+    width: 85%;
+    margin-bottom: 8px;
+}
+
+/* Author skeleton */
+.skeleton-author {
+    height: 16px;
+    width: 60%;
+    margin-bottom: 12px;
+}
+
+/* Stats skeleton */
+.skeleton-stat-label {
+    height: 14px;
+    width: 45px;
+    margin-bottom: 2px;
+}
+
+.skeleton-stat-value {
+    height: 14px;
+    width: 20px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .skeleton {
+        background: linear-gradient(90deg, #343a40 25%, #495057 50%, #343a40 75%);
+        background-size: 200% 100%;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton {
+        animation: none;
+        background: #f8f9fa;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        .skeleton {
+            background: #343a40;
+        }
+    }
+}

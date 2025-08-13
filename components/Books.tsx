@@ -1,10 +1,11 @@
 "use client";
-import React, { useCallback } from 'react';
+import React, { useCallback, Suspense, useMemo } from 'react';
 import "../styles/BookRow.css";
 import { Book } from '../types/Book';
 import Searchbar from './Searchbar';
 import { SearchLoadingState } from './SearchLoadingState';
-import { VirtualizedBookList } from './VirtualizedBookList';
+import AsyncSearchResults from './AsyncSearchResults';
+import BookListSkeleton from './BookListSkeleton';
 import { useBookSearch, useVirtualScroll } from '../hooks';
 
 interface BooksProps {
@@ -13,6 +14,7 @@ interface BooksProps {
 
 /**
  * Main Books component that handles book display, search, and virtualization
+ * Optimized with memoization and Suspense boundaries for better performance
  */
 const Books: React.FC<BooksProps> = ({ books: initialBooks }) => {
     const {
@@ -29,6 +31,7 @@ const Books: React.FC<BooksProps> = ({ books: initialBooks }) => {
 
     const { lastScrollPosition, handleScroll } = useVirtualScroll();
 
+    // Memoize expensive callback functions to prevent child re-renders
     const handleSearch = useCallback(() => {
         performSearch(searchQuery, false); // Force fresh search when explicitly requested
     }, [performSearch, searchQuery]);
@@ -38,6 +41,25 @@ const Books: React.FC<BooksProps> = ({ books: initialBooks }) => {
             await loadMore(searchQuery, books[books.length - 1].id);
         }
     }, [loadMore, searchQuery, books]);
+
+    // Memoize props object to prevent unnecessary re-renders
+    const asyncSearchResultsProps = useMemo(() => ({
+        books,
+        isSearching,
+        searchQuery,
+        lastScrollPosition,
+        loadingMore,
+        onScroll: handleScroll,
+        onEndReached: handleEndReached
+    }), [
+        books,
+        isSearching,
+        searchQuery,
+        lastScrollPosition,
+        loadingMore,
+        handleScroll,
+        handleEndReached
+    ]);
 
     return (
         <div>
@@ -52,15 +74,9 @@ const Books: React.FC<BooksProps> = ({ books: initialBooks }) => {
                     isSearching={isSearching} 
                     hasBooks={books.length > 0} 
                 />
-                {!(isSearching && books.length === 0) && (
-                    <VirtualizedBookList
-                        books={books}
-                        lastScrollPosition={lastScrollPosition}
-                        loadingMore={loadingMore}
-                        onScroll={handleScroll}
-                        onEndReached={handleEndReached}
-                    />
-                )}
+                <Suspense fallback={<BookListSkeleton count={8} />}>
+                    <AsyncSearchResults {...asyncSearchResultsProps} />
+                </Suspense>
             </div>
         </div>
     );

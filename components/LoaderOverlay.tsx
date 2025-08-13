@@ -1,3 +1,4 @@
+import React, { memo } from 'react';
 import "../styles/LoaderOverlay.css";
 
 type Props = {
@@ -5,7 +6,11 @@ type Props = {
     message: string;
 }
 
-const LoaderOverlay = (props: Props) => {
+/**
+ * Enhanced loader overlay component with memoization
+ * Prevents unnecessary re-renders when props haven't changed
+ */
+const LoaderOverlay = memo((props: Props) => {
     return (
         <div className="modal active">
             <div className="loading-overlay" id="loadingOverlay">
@@ -19,7 +24,9 @@ const LoaderOverlay = (props: Props) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+});
+
+LoaderOverlay.displayName = 'LoaderOverlay';
 
 export default LoaderOverlay;
