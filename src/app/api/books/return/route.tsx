@@ -1,5 +1,6 @@
 import { returnBook } from "../../../../../db/borrowedBooks";
 import { getLoggedInUser } from "../../../../../db/user";
+import { invalidateBooksCache } from "../../../action";
 
 export const POST = async (req: Request) => {
     const { barcode } = await req.json();
@@ -16,6 +17,10 @@ export const POST = async (req: Request) => {
     try {
         // Assuming returnBook is a function that handles the logic of returning a book
         await returnBook(user.id, barcode);
+        
+        // Invalidate cache after successful return operation
+        await invalidateBooksCache();
+        
         return new Response(JSON.stringify({ message: "Returned book successfully" }), {
             status: 200,
             headers: {

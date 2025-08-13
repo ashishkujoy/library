@@ -1,5 +1,6 @@
 import { borrowBook } from "../../../../../db/borrowedBooks";
 import { getLoggedInUser } from "../../../../../db/user";
+import { invalidateBooksCache } from "../../../action";
 
 export const POST = async (req: Request) => {
     const { barcode } = await req.json();
@@ -25,6 +26,10 @@ export const POST = async (req: Request) => {
                 }
             });
         }
+        
+        // Invalidate cache after successful borrow operation
+        await invalidateBooksCache();
+        
         console.log("Book borrowed successfully for user:", user.name, "with barcode:", barcode);
         return new Response(JSON.stringify({ message: "Borrowed book successfully" }), {
             status: 200,
