@@ -1,21 +1,24 @@
-import { useEffect, useRef } from 'react';
-import QRCode from 'qrcode';
 import '@/styles/QRCode.css';
+import Image from 'next/image';
+import QRCode from 'qrcode';
+import { useEffect, useState } from 'react';
 
 const QRCodeCard = ({ title }: { title: string }) => {
-    const canvasRef = useRef<HTMLImageElement | null>(null);
+    const [uri, setUri] = useState<string | null>(null);
 
     useEffect(() => {
-        (async () => {
-            const uri = await QRCode.toDataURL(title);
-            const canvas = canvasRef.current;
-            if (canvas) canvas.src = uri;
-        })();
-    }, []);
+        (async () => setUri(await QRCode.toDataURL(title)))();
+    }, [title]);
+
+    if (!uri) {
+        <div style={{ width: 190, height: 190 }}>
+            loading...
+        </div>
+    }
 
     return (
         <figure className="qr-code-container">
-            <img ref={canvasRef} style={{ width: 190 }} />
+            <Image src={uri as string} alt={title} width={190} height={190} />
         </figure>
     );
 }
