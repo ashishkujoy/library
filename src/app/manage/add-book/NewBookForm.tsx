@@ -1,12 +1,19 @@
 "use client";
-import BarcodeScanner from "@/components/BarcodeScanner";
+import dynamic from "next/dynamic";
 import LabelStack from "@/components/LabelStack";
 import LoaderOverlay from "@/components/LoaderOverlay";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Note from "@/components/Note";
 import Snackbar from "@/components/Snackbar";
 import TextInput from "@/components/TextInput";
 import { QrCodeIcon } from "lucide-react";
 import { useState, FormEvent, useRef } from "react";
+
+// Dynamic import for BarcodeScanner to reduce bundle size
+const BarcodeScanner = dynamic(() => import("@/components/BarcodeScanner"), {
+    loading: () => <LoadingSpinner size="medium" message="Loading scanner..." />,
+    ssr: false
+});
 
 type BookDetails = {
     title: string;
