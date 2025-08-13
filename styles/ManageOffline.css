@@ -1,0 +1,101 @@
+.manage-offline-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.manage-offline-card {
+  max-width: 28rem;
+  width: 100%;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  text-align: center;
+}
+
+.manage-offline-icon {
+  margin: 0 auto 1.5rem;
+  width: 4rem;
+  height: 4rem;
+  background-color: #fed7aa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.manage-offline-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.manage-offline-description {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.manage-offline-limitations {
+  background-color: #fed7aa;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1.5rem;
+}
+
+.manage-offline-limitations-title {
+  font-weight: 600;
+  color: #9a3412;
+  margin-bottom: 0.5rem;
+}
+
+.manage-offline-limitations-list {
+  font-size: 0.875rem;
+  color: #c2410c;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.manage-offline-limitations-list li {
+  margin-bottom: 0.25rem;
+}
+
+.manage-offline-sync-info {
+  background-color: #dbeafe;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1.5rem;
+}
+
+.manage-offline-sync-text {
+  font-size: 0.875rem;
+  color: #1e40af;
+  margin: 0;
+}
+
+.manage-offline-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.manage-offline-reconnect-button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: #ea580c;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.manage-offline-reconnect-button:hover {
+  background-color: #c2410c;
+}

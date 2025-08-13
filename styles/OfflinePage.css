@@ -1,0 +1,97 @@
+.offline-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.offline-card {
+  max-width: 28rem;
+  width: 100%;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  text-align: center;
+}
+
+.offline-icon-container {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.offline-icon-wrapper {
+  padding: 1rem;
+  background-color: #4f46e5;
+  border-radius: 50%;
+}
+
+.offline-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.offline-description {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.offline-features {
+  margin-bottom: 1.5rem;
+}
+
+.offline-feature-item {
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+.offline-feature-item.books {
+  background-color: #dbeafe;
+}
+
+.offline-feature-item.reading {
+  background-color: #dcfce7;
+}
+
+.offline-feature-item.sync {
+  background-color: #fef3c7;
+}
+
+.offline-feature-text {
+  font-size: 0.875rem;
+}
+
+.offline-feature-text.books {
+  color: #1e40af;
+}
+
+.offline-feature-text.reading {
+  color: #166534;
+}
+
+.offline-feature-text.sync {
+  color: #92400e;
+}
+
+.offline-button-secondary {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #4f46e5;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.offline-button-secondary:hover {
+  color: #3730a3;
+}

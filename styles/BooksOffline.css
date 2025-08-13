@@ -1,0 +1,88 @@
+.books-offline-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.books-offline-card {
+  max-width: 28rem;
+  width: 100%;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  text-align: center;
+}
+
+.books-offline-icon {
+  margin: 0 auto 1.5rem;
+  width: 4rem;
+  height: 4rem;
+  background-color: #dbeafe;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.books-offline-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.books-offline-description {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.books-offline-info {
+  background-color: #dbeafe;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1.5rem;
+}
+
+.books-offline-info-title {
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 0.5rem;
+}
+
+.books-offline-info-list {
+  font-size: 0.875rem;
+  color: #1e40af;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.books-offline-info-list li {
+  margin-bottom: 0.25rem;
+}
+
+.books-offline-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.books-offline-button-secondary {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.books-offline-button-secondary:hover {
+  color: #374151;
+}

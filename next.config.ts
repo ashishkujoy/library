@@ -9,6 +9,20 @@ const nextConfig = {
     register: true,
     skipWaiting: true,
     disable: process.env.NODE_ENV === "development",
+    // Offline fallback configuration
+    fallbacks: {
+      document: '/offline',
+      pages: [
+        {
+          urlPattern: /^.*\/books.*$/,
+          page: '/books-offline'
+        },
+        {
+          urlPattern: /^.*\/manage.*$/,
+          page: '/manage-offline'
+        }
+      ]
+    },
     runtimeCaching: [
       // Cache Google Fonts
       {
