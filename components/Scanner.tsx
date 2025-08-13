@@ -1,8 +1,19 @@
 "use client";
 import { QrCodeIcon } from "lucide-react";
 import { useState } from "react";
-import BarcodeScanner from "./BarcodeScanner";
+import dynamic from "next/dynamic";
 import PrimaryButton from "./PrimaryButton";
+import "../styles/Scanner.css";
+
+// Dynamic import for BarcodeScanner to reduce initial bundle size
+const BarcodeScanner = dynamic(() => import("./BarcodeScanner"), {
+    loading: () => (
+        <div className="scanner-loading">
+            <div className="scanner-loading-spinner"></div>
+        </div>
+    ),
+    ssr: false
+});
 
 type ScannerProps = {
     onScanResult: (result: string) => void;
